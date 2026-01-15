@@ -1,0 +1,38 @@
+# Backend (Go)
+backend-go/tmp/
+*.exe
+*.test
+*.out
+
+# Frontend (Next.js)
+node_modules/
+.next/
+out/
+build/
+.DS_Store
+*.log
+.vercel
+.env*.local
+
+# Environment variables
+.env
+.env.local
+.env.production.local
+.env.development.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

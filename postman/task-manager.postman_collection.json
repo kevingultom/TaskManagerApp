@@ -1,0 +1,680 @@
+{
+	"info": {
+		"_postman_id": "b3e55db6-079f-4db2-8a86-01c9c114085b",
+		"name": "Task Manager API",
+		"description": "API Documentation for Task Manager Application\n\n## Authentication\nMost endpoints require JWT Bearer token. Get token from /login endpoint.\n\n## Base URL\nhttp://localhost:8000\n\n## Endpoints\n- POST /login - User authentication\n- GET /users - Get all users (protected)\n- GET /tasks - Get all tasks (protected)\n- POST /tasks - Create new task (protected)\n- PUT /tasks/:id - Update task (protected)\n- DELETE /tasks/:id - Delete task (protected)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "50634034",
+		"_collection_link": "https://kevingultom3110-178087.postman.co/workspace/Kevin-Gultom's-Workspace~ac2942d9-0a36-47a3-8885-e7f00d3b0bd8/collection/50634034-b3e55db6-079f-4db2-8a86-01c9c114085b?action=share&source=collection_link&creator=50634034"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"  const jsonData = pm.response.json();",
+									"  pm.collectionVariables.set(\"jwt_token\", jsonData.access_token);",
+									"",
+									"  pm.test(\"Token berhasil disimpan\", function () {",
+									"    pm.expect(jsonData.access_token).to.exist;",
+									"  });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"admin@test.com\",\n  \"password\": \"123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"login"
+							]
+						},
+						"description": "Login endpoint untuk mendapatkan JWT token.\n\n**Request Body:**\n- `email` (string, required): Email user\n- `password` (string, required): Password user\n\n**Response Success (200):**\n```json\n{\n  \"access_token\": \"eyJhbGci...\",\n  \"token_type\": \"bearer\"\n}\n```\n\n**Response Error (401):**\n```json\n{\n  \"message\": \"Email/password salah\"\n}\n```"
+					},
+					"response": [
+						{
+							"name": "Success Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"admin@test.com\",\n  \"password\": \"123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbkB0ZXN0LmNvbSJ9.F7ZccMG0WsSy6xu9wF_l13PAIJM32wImxqp64Cm_NvE\",\n  \"token_type\": \"bearer\"\n}"
+						},
+						{
+							"name": "Failed Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"wrong@test.com\",\n  \"password\": \"wrong\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/login",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Email/password salah\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Endpoints untuk autentikasi user"
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"users"
+							]
+						},
+						"description": "Mendapatkan daftar semua users. Endpoint ini digunakan untuk dropdown assignee di frontend.\n\n**Authentication:** Required (Bearer Token)\n\n**Response Success (200):**\n```json\n[\n  {\n    \"id\": 1,\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\"\n  },\n  {\n    \"id\": 2,\n    \"name\": \"Jane Smith\",\n    \"email\": \"jane@example.com\"\n  }\n]\n```\n\n**Response Error (401):**\n```json\n{\n  \"message\": \"Missing token\"\n}\n```"
+					},
+					"response": [
+						{
+							"name": "Success Get Users",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/users",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\n    \"id\": 1,\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\"\n  },\n  {\n    \"id\": 2,\n    \"name\": \"Jane Smith\",\n    \"email\": \"jane@example.com\"\n  },\n  {\n    \"id\": 3,\n    \"name\": \"Bob Johnson\",\n    \"email\": \"bob@example.com\"\n  }\n]"
+						}
+					]
+				}
+			],
+			"description": "Endpoints untuk mengelola users"
+		},
+		{
+			"name": "Tasks",
+			"item": [
+				{
+					"name": "Get All Tasks",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"tasks"
+							]
+						},
+						"description": "Mendapatkan daftar semua tasks beserta informasi assignee.\n\n**Authentication:** Required (Bearer Token)\n\n**Response Success (200):**\n```json\n[\n  {\n    \"id\": 1,\n    \"title\": \"Belajar Golang\",\n    \"description\": \"Pelajari dasar-dasar Golang\",\n    \"status\": \"In Progress\",\n    \"deadline\": \"2026-01-20T00:00:00Z\",\n    \"assignee_id\": 1,\n    \"assignee\": {\n      \"id\": 1,\n      \"name\": \"John Doe\",\n      \"email\": \"john@example.com\"\n    }\n  }\n]\n```"
+					},
+					"response": [
+						{
+							"name": "Success Get Tasks",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/tasks",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"tasks"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\n    \"id\": 1,\n    \"title\": \"Belajar Golang\",\n    \"description\": \"Pelajari dasar-dasar Golang dan buat REST API\",\n    \"status\": \"In Progress\",\n    \"deadline\": \"2026-01-20T00:00:00Z\",\n    \"assignee_id\": 1,\n    \"assignee\": {\n      \"id\": 1,\n      \"name\": \"John Doe\",\n      \"email\": \"john@example.com\"\n    }\n  },\n  {\n    \"id\": 2,\n    \"title\": \"Setup Database\",\n    \"description\": \"Install PostgreSQL dan setup database\",\n    \"status\": \"Done\",\n    \"deadline\": \"2026-01-15T00:00:00Z\",\n    \"assignee_id\": 2,\n    \"assignee\": {\n      \"id\": 2,\n      \"name\": \"Jane Smith\",\n      \"email\": \"jane@example.com\"\n    }\n  }\n]"
+						}
+					]
+				},
+				{
+					"name": "Create Task",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"  const data = pm.response.json();",
+									"  pm.collectionVariables.set(\"taskId\", data.id);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Belajar React\",\n  \"description\": \"Membuat aplikasi frontend dengan React dan Next.js\",\n  \"status\": \"Todo\",\n  \"deadline\": \"2026-01-25\",\n  \"assignee_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"tasks"
+							]
+						},
+						"description": "Membuat task baru.\n\n**Authentication:** Required (Bearer Token)\n\n**Request Body:**\n- `title` (string, required): Judul task\n- `description` (string, optional): Deskripsi task\n- `status` (string, optional): Status task (Todo/In Progress/Done). Default: \"Todo\"\n- `deadline` (string, required): Tanggal deadline format YYYY-MM-DD\n- `assignee_id` (integer, required): ID user yang ditugaskan\n\n**Response Success (200):**\n```json\n{\n  \"id\": 3,\n  \"title\": \"Belajar React\",\n  \"description\": \"Membuat aplikasi frontend dengan React dan Next.js\",\n  \"status\": \"Todo\",\n  \"deadline\": \"2026-01-25T00:00:00Z\",\n  \"assignee_id\": 1,\n  \"assignee\": {\n    \"id\": 1,\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\"\n  }\n}\n```"
+					},
+					"response": [
+						{
+							"name": "Success Create Task",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"Belajar React\",\n  \"description\": \"Membuat aplikasi frontend dengan React dan Next.js\",\n  \"status\": \"Todo\",\n  \"deadline\": \"2026-01-25\",\n  \"assignee_id\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/tasks",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"tasks"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": 3,\n  \"title\": \"Belajar React\",\n  \"description\": \"Membuat aplikasi frontend dengan React dan Next.js\",\n  \"status\": \"Todo\",\n  \"deadline\": \"2026-01-25T00:00:00Z\",\n  \"assignee_id\": 1,\n  \"assignee\": {\n    \"id\": 1,\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\"\n  }\n}"
+						},
+						{
+							"name": "Error Invalid Deadline",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"Belajar React\",\n  \"description\": \"Test\",\n  \"status\": \"Todo\",\n  \"deadline\": \"invalid-date\",\n  \"assignee_id\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/tasks",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"tasks"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Invalid deadline format (use YYYY-MM-DD)\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Belajar Golang Advanced\",\n  \"description\": \"Pelajari konsep advanced: goroutines, channels, testing\",\n  \"status\": \"In Progress\",\n  \"deadline\": \"2026-01-30\",\n  \"assignee_id\": 2\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/tasks/{{taskId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"tasks",
+								"{{taskId}}"
+							]
+						},
+						"description": "Update task berdasarkan ID.\n\n**Authentication:** Required (Bearer Token)\n\n**URL Parameters:**\n- `taskId` (integer): Task ID yang akan diupdate (otomatis terisi dari Create Task)\n\n**Request Body:**\n- `title` (string, required): Judul task\n- `description` (string, optional): Deskripsi task\n- `status` (string, required): Status task (Todo/In Progress/Done)\n- `deadline` (string, required): Tanggal deadline format YYYY-MM-DD\n- `assignee_id` (integer, required): ID user yang ditugaskan\n\n**Response Success (200):**\n```json\n{\n  \"id\": 1,\n  \"title\": \"Belajar Golang Advanced\",\n  \"description\": \"Pelajari konsep advanced: goroutines, channels, testing\",\n  \"status\": \"In Progress\",\n  \"deadline\": \"2026-01-30T00:00:00Z\",\n  \"assignee_id\": 2,\n  \"assignee\": {\n    \"id\": 2,\n    \"name\": \"Jane Smith\",\n    \"email\": \"jane@example.com\"\n  }\n}\n```\n\n**Response Error (404):**\n```json\n{\n  \"message\": \"Task not found\"\n}\n```"
+					},
+					"response": [
+						{
+							"name": "Success Update Task",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"Belajar Golang Advanced\",\n  \"description\": \"Pelajari konsep advanced: goroutines, channels, testing\",\n  \"status\": \"In Progress\",\n  \"deadline\": \"2026-01-30\",\n  \"assignee_id\": 2\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/tasks/1",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"tasks",
+										"1"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": 1,\n  \"title\": \"Belajar Golang Advanced\",\n  \"description\": \"Pelajari konsep advanced: goroutines, channels, testing\",\n  \"status\": \"In Progress\",\n  \"deadline\": \"2026-01-30T00:00:00Z\",\n  \"assignee_id\": 2,\n  \"assignee\": {\n    \"id\": 2,\n    \"name\": \"Jane Smith\",\n    \"email\": \"jane@example.com\"\n  }\n}"
+						},
+						{
+							"name": "Error Task Not Found",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"title\": \"Test\",\n  \"description\": \"Test\",\n  \"status\": \"Todo\",\n  \"deadline\": \"2026-01-30\",\n  \"assignee_id\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8000/tasks/999",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"tasks",
+										"999"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Task not found\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/tasks/{{taskId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"tasks",
+								"{{taskId}}"
+							]
+						},
+						"description": "Menghapus task berdasarkan ID.\n\n**Authentication:** Required (Bearer Token)\n\n**URL Parameters:**\n- `id` (integer): Task ID yang akan dihapus\n\n**Response Success (200):**\n```json\n{\n  \"message\": \"Task deleted\"\n}\n```\n\n**Response Error (404):**\n```json\n{\n  \"message\": \"Task not found\"\n}\n```"
+					},
+					"response": [
+						{
+							"name": "Success Delete Task",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/tasks/2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"tasks",
+										"2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Task deleted\"\n}"
+						},
+						{
+							"name": "Error Task Not Found",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8000/tasks/999",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"tasks",
+										"999"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Task not found\"\n}"
+						}
+					]
+				}
+			],
+			"description": "Endpoints untuk mengelola tasks (CRUD operations)"
+		},
+		{
+			"name": "Chat with AI",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{jwt_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"message\": \"Tampilkan semua task yang statusnya belum selesai\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/chat",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"chat"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "taskId",
+			"value": "1",
+			"type": "string"
+		}
+	]
+}
