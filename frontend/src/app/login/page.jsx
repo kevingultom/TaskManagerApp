@@ -32,7 +32,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-blue-600 to-cyan-500 p-4">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
@@ -44,9 +44,15 @@ export default function LoginPage() {
         <div className="bg-white/95 backdrop-blur-lg p-8 rounded-3xl shadow-2xl border border-white/20">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="text-5xl mb-4">📋</div>
-            <h1 className="text-3xl font-bold text-gray-800 mb-2">Task Manager</h1>
-            <p className="text-gray-600 text-sm">Silakan login untuk melanjutkan</p>
+            <div className="mb-4 flex justify-center">
+              <img 
+                src="https://cdn-icons-png.flaticon.com/512/906/906334.png" 
+                alt="Task Manager Icon" 
+                className="w-16 h-16"
+              />
+            </div>
+            <h1 className="text-3xl font-bold text-gray-800 mb-2">Login</h1>
+            <p className="text-gray-600 text-sm">Silakan login terlebih dahulu</p>
           </div>
 
           {/* Error Message */}
@@ -65,7 +71,7 @@ export default function LoginPage() {
               </label>
               <input
                 type="email"
-                className="w-full border-2 border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 rounded-xl px-4 py-3 transition-all outline-none text-gray-900 bg-white"
+                className="w-full border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 rounded-xl px-4 py-3 transition-all outline-none text-gray-900 bg-white"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your.email@example.com"
@@ -79,7 +85,7 @@ export default function LoginPage() {
               </label>
               <input
                 type="password"
-                className="w-full border-2 border-gray-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 rounded-xl px-4 py-3 transition-all outline-none text-gray-900 bg-white"
+                className="w-full border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 rounded-xl px-4 py-3 transition-all outline-none text-gray-900 bg-white"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Masukkan password"
@@ -90,14 +96,14 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 disabled:from-gray-400 disabled:to-gray-500 text-white px-6 py-3.5 rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:transform-none"
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:from-gray-400 disabled:to-gray-500 text-white px-6 py-3.5 rounded-xl font-bold text-base shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02] disabled:cursor-not-allowed disabled:transform-none"
             >
               {loading ? "🔄 Logging in..." : " Login "}
             </button>
           </form>
 
           {/* Footer Info */}
-          <div className="mt-6 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl border border-indigo-100">
+          <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl border border-blue-100">
             <p className="text-xs text-gray-600 text-center mb-1 font-medium">
               Akun Demo
             </p>

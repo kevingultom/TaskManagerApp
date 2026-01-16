@@ -4,14 +4,20 @@ import (
 	"log"
 	"taskmanager/config"
 	"taskmanager/handlers"
-	"taskmanager/models"
 	"taskmanager/middleware"
+	"taskmanager/models"
 
-	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// Load .env file
+	if err := godotenv.Load(); err != nil {
+		log.Println("Warning: .env file not found, using system environment variables")
+	}
+
 	// connect DB
 	if err := config.ConnectDB(); err != nil {
 		log.Fatal("DB connection error:", err)
@@ -23,14 +29,13 @@ func main() {
 	r := gin.Default()
 	// CORS configuration
 	r.Use(cors.New(cors.Config{
-	AllowOrigins:     []string{"http://localhost:3000", "http://localhost:3001"},
-	AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-	AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
-	AllowCredentials: true,
-}))
+		AllowOrigins:     []string{"http://localhost:3000", "http://localhost:3001"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
+		AllowCredentials: true,
+	}))
 
-
-// public
+	// public
 	r.POST("/login", handlers.Login)
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(200, gin.H{"status": "ok"})
@@ -49,7 +54,6 @@ func main() {
 	auth.PUT("/tasks/:id", handlers.UpdateTask)
 	auth.DELETE("/tasks/:id", handlers.DeleteTask)
 	auth.POST("/chat", handlers.ChatWithAI)
-
 
 	r.Run(":8000")
 

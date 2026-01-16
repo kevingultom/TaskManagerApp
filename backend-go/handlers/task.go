@@ -13,8 +13,8 @@ type TaskRequest struct {
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Status      string `json:"status"`
-	Deadline    string `json:"deadline"`    
-	AssigneeID  *uint  `json:"assignee_id"`  
+	Deadline    string `json:"deadline"`
+	AssigneeID  *uint  `json:"assignee_id"`
 }
 
 // GET /tasks
@@ -32,10 +32,14 @@ func CreateTask(c *gin.Context) {
 		return
 	}
 
-	deadline, err := time.Parse("2006-01-02", req.Deadline)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid deadline format (use YYYY-MM-DD)"})
-		return
+	var deadline time.Time
+	if req.Deadline != "" {
+		parsedDeadline, err := time.Parse("2006-01-02", req.Deadline)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid deadline format (use YYYY-MM-DD)"})
+			return
+		}
+		deadline = parsedDeadline
 	}
 
 	status := req.Status
@@ -57,7 +61,6 @@ func CreateTask(c *gin.Context) {
 	c.JSON(http.StatusOK, task)
 }
 
-
 func UpdateTask(c *gin.Context) {
 	id := c.Param("id")
 
@@ -73,10 +76,14 @@ func UpdateTask(c *gin.Context) {
 		return
 	}
 
-	deadline, err := time.Parse("2006-01-02", req.Deadline)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid deadline format (use YYYY-MM-DD)"})
-		return
+	var deadline time.Time
+	if req.Deadline != "" {
+		parsedDeadline, err := time.Parse("2006-01-02", req.Deadline)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Invalid deadline format (use YYYY-MM-DD)"})
+			return
+		}
+		deadline = parsedDeadline
 	}
 
 	task.Title = req.Title

@@ -4,9 +4,8 @@ import "os"
 
 func GetGeminiAPIKey() string {
 	key := os.Getenv("GEMINI_API_KEY")
-	if key != "" {
-		return key
+	if key == "" {
+		panic("GEMINI_API_KEY environment variable is required")
 	}
-
-	return "AIzaSyDKA4PM-FioTq_PIlCqg6Rmty7THZi4Ays"
+	return key
 }

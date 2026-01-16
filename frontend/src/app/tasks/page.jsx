@@ -14,7 +14,6 @@ export default function TasksPage() {
   const [loading, setLoading] = useState(false);
   const [filterStatus, setFilterStatus] = useState("All");
 
-  // form state (dipakai untuk add/edit)
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -23,7 +22,7 @@ export default function TasksPage() {
     assignee_id: "",
   });
 
-  const [editingId, setEditingId] = useState(null); // null = mode add
+  const [editingId, setEditingId] = useState(null); 
 
   async function loadAll() {
     setError("");
@@ -36,7 +35,6 @@ export default function TasksPage() {
       setTasks(tasksData);
       setUsers(usersData);
 
-      // set default assignee kalau belum ada (biar dropdown tidak kosong)
       if (!form.assignee_id && usersData.length > 0) {
         setForm((prev) => ({ ...prev, assignee_id: String(usersData[0].id) }));
       }
@@ -95,7 +93,7 @@ export default function TasksPage() {
       title: form.title.trim(),
       description: form.description.trim(),
       status: form.status,
-      deadline: form.deadline, // kirim "YYYY-MM-DD"
+      deadline: form.deadline, 
       assignee_id: Number(form.assignee_id),
     };
 
@@ -172,71 +170,83 @@ export default function TasksPage() {
     : tasks.filter(t => t.status === filterStatus);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-blue-100">
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 shadow-lg">
-        <div className="max-w-6xl mx-auto px-6 py-6">
+      <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-cyan-600 shadow-2xl backdrop-blur-lg">
+        <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-white mb-1">📋 Task Manager</h1>
-              <p className="text-indigo-100 text-sm">Kelola semua tugas Anda dengan mudah</p>
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-lg">
+                <img 
+                  src="https://cdn-icons-png.flaticon.com/512/906/906334.png" 
+                  alt="Icon" 
+                  className="w-8 h-8"
+                />
+              </div>
+              <div>
+                <h1 className="text-4xl font-bold text-white mb-1 tracking-tight">Task Management</h1>
+                <p className="text-blue-100 text-sm font-medium">Kelola semua tugas Anda dengan mudah</p>
+              </div>
             </div>
             <button
               onClick={logout}
-              className="bg-white/20 hover:bg-white/30 backdrop-blur text-white px-5 py-2.5 rounded-lg font-medium transition-all duration-200 border border-white/30"
-            >
-            Logout
+              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-2xl hover:scale-105 flex items-center gap-2"
+            >Logout
             </button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
+      <div className="max-w-7xl mx-auto px-6 py-10">
 
         {error && (
-          <div className="mb-6 text-sm text-red-700 bg-red-50 p-4 rounded-xl border-l-4 border-red-500 shadow-sm flex items-start gap-3">
-            <span className="text-xl">⚠️</span>
-            <span>{error}</span>
+          <div className="mb-8 text-sm text-red-700 bg-red-50 p-5 rounded-2xl border border-red-200 shadow-xl flex items-start gap-3 backdrop-blur-sm animate-pulse">
+            <span className="text-2xl">⚠️</span>
+            <span className="font-medium">{error}</span>
           </div>
         )}
 
         {/* FORM ADD / EDIT */}
-        <div className="bg-white rounded-2xl shadow-xl p-6 mb-8 border border-gray-100">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+        <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 mb-10 border border-white/50 hover:shadow-3xl transition-all duration-300">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
               {editingId ? (
-                <><span className="text-2xl">✏️</span> Edit Task <span className="text-sm font-normal text-gray-500">(ID: {editingId})</span></>
+                <><div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center text-white text-xl shadow-lg">✏️</div> <span>Edit Task</span> <span className="text-sm font-normal text-gray-500 bg-gray-100 px-3 py-1 rounded-full">ID: {editingId}</span></>
               ) : (
-                <><span className="text-2xl"></span> Tambah Task Baru</>
+                <> <span>Tambah Task Baru</span></>
               )}
             </h2>
             {editingId && (
               <button
                 type="button"
                 onClick={resetForm}
-                className="text-sm border-2 border-gray-300 hover:border-gray-400 px-4 py-2 rounded-lg font-medium transition-all duration-200"
+                className="text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2.5 rounded-xl font-semibold transition-all duration-300 hover:scale-105 shadow-md"
               >
                 ❌ Batal
               </button>
             )}
           </div>
 
-          <form onSubmit={submitForm} className="grid gap-5">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">📝 Judul Task </label>
+          <form onSubmit={submitForm} className="grid gap-6">
+            <div className="group">
+              <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+                <span className="text-blue-600">📝</span> Judul Task
+              </label>
               <input
-                className="w-full border-2 border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-lg px-4 py-3 transition-all outline-none text-gray-900 bg-white"
+                className="w-full border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 rounded-xl px-5 py-4 transition-all outline-none text-gray-900 bg-white shadow-sm hover:shadow-md font-medium"
                 value={form.title}
                 onChange={(e) => setForm({ ...form, title: e.target.value })}
                 placeholder="Contoh: Belajar Go Programming"
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">📄 Deskripsi</label>
+            <div className="group">
+              <label className="block text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+                <span className="text-blue-600">📄</span> Deskripsi
+              </label>
               <textarea
-                className="w-full border-2 border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-lg px-4 py-3 transition-all outline-none resize-none text-gray-900 bg-white"
-                rows={3}
+                className="w-full border-2 border-gray-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-100 rounded-xl px-5 py-4 transition-all outline-none resize-none text-gray-900 bg-white shadow-sm hover:shadow-md font-medium"
+                rows={4}
                 value={form.description}
                 onChange={(e) =>
                   setForm({ ...form, description: e.target.value })
@@ -249,7 +259,7 @@ export default function TasksPage() {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">🎯 Status</label>
                 <select
-                  className="w-full border-2 border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-lg px-4 py-3 transition-all outline-none bg-white text-gray-900"
+                  className="w-full border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg px-4 py-3 transition-all outline-none bg-white text-gray-900"
                   value={form.status}
                   onChange={(e) => setForm({ ...form, status: e.target.value })}
                 >
@@ -263,7 +273,7 @@ export default function TasksPage() {
                 <label className="block text-sm font-semibold text-gray-700 mb-2">📅 Deadline</label>
                 <input
                   type="date"
-                  className="w-full border-2 border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-lg px-4 py-3 transition-all outline-none text-gray-900 bg-white"
+                  className="w-full border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg px-4 py-3 transition-all outline-none text-gray-900 bg-white"
                   value={form.deadline}
                   onChange={(e) =>
                     setForm({ ...form, deadline: e.target.value })
@@ -274,7 +284,7 @@ export default function TasksPage() {
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">👤 Assignee *</label>
                 <select
-                  className="w-full border-2 border-gray-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-lg px-4 py-3 transition-all outline-none bg-white text-gray-900"
+                  className="w-full border-2 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 rounded-lg px-4 py-3 transition-all outline-none bg-white text-gray-900"
                   value={form.assignee_id}
                   onChange={(e) =>
                     setForm({ ...form, assignee_id: e.target.value })
@@ -295,9 +305,9 @@ export default function TasksPage() {
 
             <button
               type="submit"
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-6 py-3.5 rounded-lg font-bold text-base shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3.5 rounded-lg font-bold text-base shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
             >
-              {editingId ? "💾 Update Task" : "✨ Buat Task Baru"}
+              {editingId ? "💾 Update Task" : " ✨ Buat Task Baru"}
             </button>
           </form>
         </div>
@@ -320,7 +330,7 @@ export default function TasksPage() {
                   onClick={() => setFilterStatus(status)}
                   className={`px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 ${
                     filterStatus === status
-                      ? "bg-indigo-600 text-white shadow-md"
+                      ? "bg-blue-600 text-white shadow-md"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
@@ -346,7 +356,7 @@ export default function TasksPage() {
           ) : (
             <div className="grid gap-4">
               {filteredTasks.map((t) => (
-                <div key={t.id} className="border-2 border-gray-200 hover:border-indigo-300 rounded-xl p-5 transition-all duration-200 hover:shadow-lg bg-gradient-to-r from-white to-gray-50">
+                <div key={t.id} className="border-2 border-gray-200 hover:border-blue-300 rounded-xl p-5 transition-all duration-200 hover:shadow-lg bg-gradient-to-r from-white to-gray-50">
                   <div className="flex flex-col lg:flex-row gap-4">
                     {/* Content */}
                     <div className="flex-1">
@@ -379,7 +389,7 @@ export default function TasksPage() {
                     {/* Actions */}
                     <div className="flex lg:flex-col gap-2 min-w-[200px] shrink-0">
                       <select
-                        className="flex-1 lg:w-full border-2 border-gray-300 focus:border-indigo-500 rounded-lg px-3 py-2.5 text-sm font-medium transition-all outline-none bg-white text-gray-900"
+                        className="flex-1 lg:w-full border-2 border-gray-300 focus:border-blue-500 rounded-lg px-3 py-2.5 text-sm font-medium transition-all outline-none bg-white text-gray-900"
                         value={t.status}
                         onChange={(e) => changeStatus(t.id, e.target.value)}
                       >
@@ -391,9 +401,9 @@ export default function TasksPage() {
                       <button
                         type="button"
                         onClick={() => startEdit(t)}
-                        className="flex-1 lg:w-full text-sm border-2 border-indigo-500 text-indigo-600 hover:bg-indigo-50 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 cursor-pointer"
+                        className="flex-1 lg:w-full text-sm border-2 border-blue-500 text-blue-600 hover:bg-blue-50 px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 cursor-pointer"
                       >
-                        ✏️ Edit
+                        Edit
                       </button>
 
                       <button
@@ -401,7 +411,7 @@ export default function TasksPage() {
                         onClick={() => deleteTask(t.id)}
                         className="flex-1 lg:w-full text-sm bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-lg font-semibold transition-all duration-200 cursor-pointer shadow-md hover:shadow-lg"
                       >
-                        🗑️ Hapus
+                        Hapus
                       </button>
                     </div>
                   </div>

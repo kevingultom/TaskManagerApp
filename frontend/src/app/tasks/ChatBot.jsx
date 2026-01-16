@@ -8,7 +8,7 @@ export default function ChatBot() {
   const [messages, setMessages] = useState([
     {
       role: "bot",
-      text: "👋 Halo! Saya asisten AI Task Manager. Tanya saya tentang tasks Anda!",
+      text: "Halo! Saya asisten AI Task Manager. Tanya saya tentang tasks Anda!",
     },
   ]);
   const [input, setInput] = useState("");

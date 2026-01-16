@@ -40,6 +40,14 @@ CREATE DATABASE task_manager_db;
 ### 2. Jalankan Backend
 ```bash
 cd backend-go
+
+# Install dependencies
+go mod tidy
+
+# Buat file .env dan isi dengan Gemini API Key (lihat section AI Chatbot di bawah)
+# GEMINI_API_KEY=your_api_key_here
+
+# Jalankan server
 go run main.go
 ```
 Backend: http://localhost:8000
@@ -85,7 +93,9 @@ AI Chatbot menggunakan **Google Gemini 2.5 Flash** untuk menjawab pertanyaan ten
 ### Library & Model yang Dipakai
 
 - **Model AI**: Google Gemini 2.5 Flash
-- **Library Backend**: `google/generative-ai-go` v0.20.1 (Official Go SDK)
+- **Library Backend**: 
+  - `google/generative-ai-go` v0.20.1 (Official Go SDK)
+  - `joho/godotenv` v1.5.1 (Load .env file)
 - **Authentication**: JWT Bearer Token
 - **Database**: PostgreSQL dengan GORM
 
@@ -98,23 +108,21 @@ AI Chatbot menggunakan **Google Gemini 2.5 Flash** untuk menjawab pertanyaan ten
 - Copy API key yang dihasilkan
 
 #### 2. Set API Key
-Edit file `backend-go/config/env.go`:
-```go
-func GetGeminiAPIKey() string {
-    key := os.Getenv("GEMINI_API_KEY")
-    if key != "" {
-        return key
-    }
-    // Ganti dengan API key Anda
-    return "AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXX"
-}
+Buat file `.env` di folder `backend-go`:
+
+```bash
+cd backend-go
+# Buat file .env
 ```
 
-**ATAU** gunakan environment variable:
-```bash
-# Windows
-set GEMINI_API_KEY=AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXX
+Isi file `.env` dengan:
 ```
+GEMINI_API_KEY=AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXX
+```
+
+**Ganti** `AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXX` dengan API key Anda yang sebenarnya.
+
+**PENTING:** File `.env` sudah masuk `.gitignore`, jadi API key Anda aman dan tidak akan ter-commit ke repository.
 
 #### 3. Install Dependencies
 ```bash
@@ -256,6 +264,9 @@ Backend sudah dikonfigurasi untuk accept request dari frontend (localhost:3000).
 
 **Environment Variables:**
 Untuk production, disarankan menggunakan environment variable untuk:
+- Gemini API Key (GEMINI_API_KEY) - **WAJIB** untuk fitur chatbot
 - Database credentials (DB_HOST, DB_USER, DB_PASSWORD, etc.)
-- Gemini API Key (GEMINI_API_KEY)
 - JWT Secret Key
+
+**File .env:**
+Project ini sudah dikonfigurasi untuk membaca file `.env` menggunakan library `godotenv`. File `.env` sudah masuk ke `.gitignore` untuk keamanan.
