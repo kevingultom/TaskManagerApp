@@ -122,7 +122,7 @@ GEMINI_API_KEY=AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXX
 
 **Ganti** `AIzaSyXXXXXXXXXXXXXXXXXXXXXXXXX` dengan API key Anda yang sebenarnya.
 
-**PENTING:** File `.env` sudah masuk `.gitignore`, jadi API key Anda aman dan tidak akan ter-commit ke repository.
+**Note:** File `.env` sudah masuk `.gitignore`, jadi API key Anda aman dan tidak akan ter-commit ke repository.
 
 #### 3. Install Dependencies
 ```bash
