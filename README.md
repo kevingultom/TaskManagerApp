@@ -227,7 +227,7 @@ TaskManagerApp/
 Backend menggunakan GORM AutoMigrate, sehingga tabel `users` dan `tasks` akan otomatis dibuat saat pertama kali menjalankan `go run main.go`.
 
 **Seed Data:**
-Backend sudah include seed data untuk 2 users (admin@test.com dan user@test.com). Data akan otomatis masuk saat pertama kali running.
+Backend sudah include seed data untuk 1 user (admin@test.com). Data akan otomatis masuk saat pertama kali running.
 
 **CORS:**
 Backend sudah dikonfigurasi untuk accept request dari frontend (localhost:3000).
