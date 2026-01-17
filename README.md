@@ -221,36 +221,6 @@ TaskManagerApp/
 │
 └── README.md                   # Dokumentasi project (file ini)
 ```
-
----
-
-## Deliverables
-
-Berikut file-file yang dikumpulkan untuk technical test:
-
-**1. Source Code**
-- Backend: Folder `backend-go/` (Golang dengan Gin + GORM)
-- Frontend: Folder `frontend/` (Next.js + React + Tailwind)
-
-**2. Postman Collection**
-- File: `postman/task-manager.postman_collection.json`
-- Berisi 7 endpoints (termasuk AI Chatbot)
-
-**3. ERD (Entity Relationship Diagram)**
-- File: `ERD/ERD_Task_Manager.drawio.png`
-- Format: PNG image dari draw.io
-
-**4. README.md**
-- File ini berisi instruksi menjalankan project
-
-**5. AI Chatbot**
-- Backend: `backend-go/handlers/chatbot.go`
-- Frontend: `frontend/src/app/tasks/ChatBot.jsx`
-- Model: Google Gemini 2.5 Flash
-- Dokumentasi lengkap di section "AI Chatbot" di atas
-
----
-
 ## Catatan Tambahan
 
 **Database Auto-Migration:**
