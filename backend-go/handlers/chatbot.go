@@ -111,11 +111,11 @@ func buildTasksContext(tasks []models.Task) string {
 
 		builder.WriteString(fmt.Sprintf(`
 %d. Task ID: %d
-   Judul: %s
-   Deskripsi: %s
-   Status: %s
-   Deadline: %s%s
-   Assignee: %s
+  Judul: %s
+  Deskripsi: %s
+  Status: %s
+  Deadline: %s%s
+  Assignee: %s
 `, i+1, task.ID, task.Title, task.Description, task.Status, deadline, isToday, assigneeName))
 	}
 
