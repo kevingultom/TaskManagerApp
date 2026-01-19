@@ -33,7 +33,7 @@ Aplikasi Task Manager dengan AI Chatbot untuk Technical Test - Full Stack Develo
 ### 1. Setup Database
 ```bash
 psql -U postgres
-CREATE DATABASE task_manager_db;
+CREATE DATABASE taskdb;
 \q
 ```
 
